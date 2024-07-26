@@ -10,12 +10,12 @@ class UserProfile(AbstractUser):
     
     groups = models.ManyToManyField(
         Group,
-        related_name='user_profiles',  # Add related_name to avoid conflict
+        related_name='user_profiles',  
         blank=True,
     )
     user_permissions = models.ManyToManyField(
         Permission,
-        related_name='user_profiles',  # Add related_name to avoid conflict
+        related_name='user_profiles', 
         blank=True,
     )
 
