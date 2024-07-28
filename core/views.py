@@ -11,6 +11,14 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     queryset = UserProfile.objects.all()
     serializer_class = UserProfileSerializer
 
+    # def create(self, request, *args, **kwargs):
+    #     user = super().create(request, *args, **kwargs)
+    #     password = request.data.get("password")
+    #     user.set_password("password")
+    #     user.save()
+    #     return user
+
+
 class TaskViewSet(viewsets.ModelViewSet):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
@@ -38,3 +46,33 @@ class AttendanceViewSet(viewsets.ModelViewSet):
         attendance.check_out_time = timezone.now()
         attendance.save()
         return Response({'status': 'Checked out'})
+
+
+
+
+
+from django.contrib.auth import authenticate, login, logout
+from rest_framework.permissions import AllowAny
+from rest_framework import views
+from rest_framework.response import Response
+from rest_framework import status
+
+from . import serializers
+
+class LoginView(views.APIView):
+    # This view should be accessible also for unauthenticated users.
+    permission_classes = (AllowAny,)
+    serializer_class = serializers.LoginSerializer
+
+    def post(self, request, format=None):
+        serializer = self.serializer_class(data=self.request.data,
+            context={ 'request': self.request })
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        login(request, user)
+        return Response(None, status=status.HTTP_202_ACCEPTED)
+
+class LogoutView(views.APIView):
+    def post(self, request):
+        logout(request)
+        return Response(status=status.HTTP_200_OK)
