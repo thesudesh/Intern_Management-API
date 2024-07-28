@@ -14,4 +14,4 @@ class TaskSerializer(serializers.ModelSerializer):
 class AttendanceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Attendance
-        fields = ['id', 'user', 'date', 'check_in_time', 'check_out_time']
+        fields = ['id', 'user', 'check_in_time', 'check_out_time']
